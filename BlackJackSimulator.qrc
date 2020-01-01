@@ -1,0 +1,5 @@
+<RCC>
+	<qresource prefix="/">
+		<file>BlackJackSimulator.qml</file>
+	</qresource>
+</RCC>
