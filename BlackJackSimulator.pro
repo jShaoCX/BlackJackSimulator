@@ -24,7 +24,8 @@ SOURCES += BlackJackSimulator.cpp \
            Rules.cpp \
            Game.cpp \
            Defs.cpp \
-           Simulation.cpp
+           Simulation.cpp \
+           GameCreator.cpp
 
 HEADERS += Card.h \
            Hand.h \
@@ -35,4 +36,5 @@ HEADERS += Card.h \
            Rules.h \
            Defs.h \
            Game.h \
-           Simulation.h
+           Simulation.h \
+           GameCreator.h

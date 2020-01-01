@@ -8,4 +8,5 @@ Rules.o
 Game.o
 Defs.o
 Simulation.o
+GameCreator.o
 qrc_BlackJackSimulator.o

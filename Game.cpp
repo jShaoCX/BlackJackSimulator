@@ -15,20 +15,23 @@ Game::Game() :
 	black_jack_pay_(kPay3To2) {
 }
 
-void Game::SetShoe(Shoe* shoe) {
-	shoe_ = shoe;
+void Game::SetShoe(std::unique_ptr<Shoe> shoe) {
+	shoe_ = std::move(shoe);
 }
 
-void Game::SetDealer(Dealer* dealer) {
-	dealer_ = dealer;
+void Game::SetDealer(std::unique_ptr<Dealer> dealer) {
+	dealer_ = std::move(dealer);
 }
 
-void Game::AddPlayer(Player* player) {
-	players_.push_back(player);
+void Game::AddPlayer(std::unique_ptr<Player> player) {
+	players_.push_back(std::move(player));
 }
 
-void Game::AddPlayers(const std::vector<Player*>& players) {
-	players_ = players;
+void Game::AddPlayers(std::vector<std::unique_ptr<Player>>* players) {
+	for(size_t i = 0; i < players->size(); i++) {
+		players_.push_back(std::move(players_[i]));
+		players->erase(players->begin());
+	}
 }
 
 void Game::SetMinBet(int min_bet) {
@@ -60,7 +63,7 @@ void Game::Start(int num_iter) {
 bool Game::AreAnyPlayersIn() const {
 	bool are_any_in = false;
 	int true_count = shoe_->GetTrueCount();
-	for (Player* player : players_) {
+	for (const auto& player : players_) {
 		if (player->IsIn(min_bet_, true_count)) {
 			are_any_in = true;
 		}
@@ -72,14 +75,14 @@ void Game::Deal() {
 	std::cout << "Dealing..." << std::endl;
 	int true_count = shoe_->GetTrueCount();
 
-	for (Player* player : players_) {
+	for (const auto& player : players_) {
 		if (player->IsIn(min_bet_, true_count)) {
 			player->PlaceBet(min_bet_, true_count);
 			player->Hit(shoe_->GetNextCard());
 		}
 	}
 	dealer_->AddCard(shoe_->GetNextCard());
-	for (Player* player : players_) {
+	for (const auto& player : players_) {
 		if (player->IsIn(min_bet_, true_count)) {
 			player->Hit(shoe_->GetNextCard());
 		}
@@ -97,7 +100,7 @@ void Game::Play() {
 		return;
 	}
 
-	for (Player* player : players_) {
+	for (const auto& player : players_) {
 		if (!player->GetHands().empty()) {
 			Action act = player->Go(dealer_->GetUpCard(), shoe_->GetTrueCount());
 			while(act != Action::kDone) {
@@ -148,7 +151,7 @@ void Game::PayOut() {
 	std::cout << "Pay Out..." << std::endl;
 	// Take care of blackjacks first
 	if(dealer_->HasBlackJack()) {
-		for (Player* player : players_) {
+		for (const auto& player : players_) {
 			if(player->HasBlackJack()) {
 				continue;
 			}
@@ -161,7 +164,7 @@ void Game::PayOut() {
 
 	// dealer bust
 	if(dealer_->GetHand().IsBusted()) {
-		for (Player* player : players_) {
+		for (const auto& player : players_) {
 			for (Hand hand : player->GetHands()) {
 				if(!hand.IsBusted()) {
 					player->WinMoney(hand.GetBet());
@@ -171,7 +174,7 @@ void Game::PayOut() {
 			}
 		}
 	} else {
-		for (Player* player : players_) {
+		for (const auto& player : players_) {
 			if(player->HasBlackJack()) {
 				player->WinMoney(player->GetHands()[0].GetBet() * black_jack_pay_);
 				continue;
@@ -196,7 +199,7 @@ void Game::PayOut() {
 
 void Game::ClearTable() {
 	std::cout << "Clear Table..." << std::endl;
-	for (Player* player : players_) {
+	for (const auto& player : players_) {
 		player->Clear();
 		std::cout << player->ToString() << std::endl;
 	}
@@ -207,14 +210,14 @@ void Game::ClearTable() {
 
 std::unordered_map<std::string, Player::Stats> Game::GetEndGameStats() const {
 	std::unordered_map<std::string, Player::Stats> stats;
-	for (Player* player : players_) {
+	for (const auto& player : players_) {
 		stats[player->GetName()] = player->GetStats();
 	}
 	return stats;
 }
 
 void Game::ResetCurrentGame() {
-	for (Player* player : players_) {
+	for (const auto& player : players_) {
 		player->Reset();
 	}
 	dealer_->Clear();

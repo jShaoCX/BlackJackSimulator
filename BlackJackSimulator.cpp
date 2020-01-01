@@ -2,19 +2,27 @@
 //#include <QQmlApplicationEngine>
 
 #include "Simulation.h"
+#include "GameCreator.h"
+#include <memory>
+
+#include <iostream>
 
 int main(int argc, char *argv[]) {
 	const int kIterations = 100;
 	const int kShoesPerIteration = 100;
 
-	Simulation simulation(kIterations, kShoesPerIteration);
-	simulation.ComparePlayerQuality();
+	GameCreator creator;
 
-//	simulation.PureBasicStrategy();
-//	simulation.ComparePerfectPlayers();
-//	simulation.OtherPerfectPlayerInterference();
-//	simulation.OtherAveragePlayerInterference();
-//	simulation.OtherPoorPlayerInterference();
+	std::unique_ptr<Game> game = creator.OtherPoorPlayerInterference();
+
+	Simulation simulation(kIterations, kShoesPerIteration, game.get());
+	simulation.Start();
+
+//	creator.PureBasicStrategy();
+//	creator.ComparePerfectPlayers();
+//	creator.OtherPerfectPlayerInterference();
+//	creator.OtherAveragePlayerInterference();
+//	creator.OtherPoorPlayerInterference();
 
 //	QGuiApplication app(argc, argv);
 //	QQmlApplicationEngine engine;

@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include <memory>
 
 #include "Dealer.h"
 #include "Player.h"
@@ -19,10 +20,10 @@ class Game {
 public:
 	Game();
 
-	void SetShoe(Shoe* shoe);
-	void SetDealer(Dealer* dealer);
-	void AddPlayer(Player* player);
-	void AddPlayers(const std::vector<Player*>& players);
+	void SetShoe(std::unique_ptr<Shoe> shoe);
+	void SetDealer(std::unique_ptr<Dealer> dealer);
+	void AddPlayer(std::unique_ptr<Player> player);
+	void AddPlayers(std::vector<std::unique_ptr<Player>>* players);
 
 	void SetMinBet(int min_bet);
 	void SetBlackJackPays3To2();
@@ -42,9 +43,9 @@ private:
 	void PayOut();
 	void ClearTable();
 
-	Dealer* dealer_;
-	std::vector<Player*> players_;
-	Shoe* shoe_;
+	std::unique_ptr<Dealer> dealer_;
+	std::vector<std::unique_ptr<Player>> players_;
+	std::unique_ptr<Shoe> shoe_;
 
 	int min_bet_;
 	double black_jack_pay_;
