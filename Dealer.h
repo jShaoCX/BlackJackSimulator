@@ -12,9 +12,11 @@
 #include "Hand.h"
 #include "Defs.h"
 
+#include <memory>
+
 class Dealer {
 public:
-	explicit Dealer(DealerStrategy* strategy);
+	explicit Dealer(std::shared_ptr<DealerStrategy> strategy);
 
 	Card GetUpCard() const {
 		return hand_.GetSecondCard();
@@ -38,7 +40,7 @@ public:
 
 private:
 	Hand hand_;
-	DealerStrategy* strategy_;
+	std::shared_ptr<DealerStrategy> strategy_;
 };
 
 #endif /* DEALER_H_ */

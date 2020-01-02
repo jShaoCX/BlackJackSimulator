@@ -10,7 +10,7 @@
 #include "Dealer.h"
 #include "Constants.h"
 
-Dealer::Dealer(DealerStrategy* strategy) :
+Dealer::Dealer(std::shared_ptr<DealerStrategy> strategy) :
 	hand_(0),
 	strategy_(strategy) {}
 

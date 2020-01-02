@@ -10,11 +10,15 @@
 int main(int argc, char *argv[]) {
 	const int kIterations = 100;
 	const int kShoesPerIteration = 100;
+	std::unique_ptr<Game> game;
 
-	GameCreator creator;
+	// make sure game is completely independent of the creator
+	{
+		GameCreator creator;
+		game = std::move(creator.OtherPoorPlayerInterference());
+	}
 
-	std::unique_ptr<Game> game = creator.OtherPoorPlayerInterference();
-
+	// could insert any other type of game (can be a game assembled through future ui)
 	Simulation simulation(kIterations, kShoesPerIteration, game.get());
 	simulation.Start();
 

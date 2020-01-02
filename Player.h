@@ -9,6 +9,7 @@
 #define PLAYER_H_
 
 #include <vector>
+#include <memory>
 
 #include "Card.h"
 #include "Defs.h"
@@ -16,7 +17,8 @@
 
 class Player {
 public:
-	Player(const std::string& name, int bank_roll, Strategy* strategy, BetStrategy* bet_strategy);
+	Player(const std::string& name, int bank_roll,
+		std::shared_ptr<Strategy> strategy, std::shared_ptr<BetStrategy> bet_strategy);
 
 	struct Stats {
 		Stats();
@@ -76,8 +78,8 @@ private:
 	int bank_roll_;
 	const int initial_bank_roll_;
 
-	Strategy* strategy_;
-	BetStrategy* bet_strategy_;
+	std::shared_ptr<Strategy> strategy_;
+	std::shared_ptr<BetStrategy> bet_strategy_;
 };
 
 #endif /* PLAYER_H_ */

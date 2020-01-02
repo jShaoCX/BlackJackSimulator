@@ -11,7 +11,8 @@
 #include <sstream>
 #include <iomanip>
 
-Player::Player(const std::string& name, int bank_roll, Strategy* strategy, BetStrategy* bet_strategy) :
+Player::Player(const std::string& name, int bank_roll,
+		std::shared_ptr<Strategy> strategy, std::shared_ptr<BetStrategy> bet_strategy) :
 	name_(name),
 	current_hand_idx_(0),
 	bank_roll_(bank_roll),
