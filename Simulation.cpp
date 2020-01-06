@@ -113,9 +113,9 @@ void Simulation::PrintResults() {
 		    stdev_max += std::pow((ave_max - max), 2.0);
 		}
 
-		if(bank_roll_pair.second.size() > 0) {
-			stdev_min = std::sqrt(stdev_min / bank_roll_pair.second.size());
-			stdev_max = std::sqrt(stdev_max / bank_roll_pair.second.size());
+		if(bank_roll_pair.second.size() > 1) {
+			stdev_min = std::sqrt(stdev_min / (bank_roll_pair.second.size() - 1));
+			stdev_max = std::sqrt(stdev_max / (bank_roll_pair.second.size() - 1));
 		}
 
 		printf("%s min/max bank: (%.2f +/- %.2f, %.2f +/- %.2f)\n",
