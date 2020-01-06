@@ -16,7 +16,7 @@
 
 class Dealer {
 public:
-	explicit Dealer(std::shared_ptr<DealerStrategy> strategy);
+	explicit Dealer(std::unique_ptr<DealerStrategy> strategy);
 
 	Card GetUpCard() const {
 		return hand_.GetSecondCard();
@@ -40,7 +40,7 @@ public:
 
 private:
 	Hand hand_;
-	std::shared_ptr<DealerStrategy> strategy_;
+	std::unique_ptr<DealerStrategy> strategy_;
 };
 
 #endif /* DEALER_H_ */

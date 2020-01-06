@@ -1,0 +1,12 @@
+BlackJackSimulator.o
+Hand.o
+Shoe.o
+Card.o
+Player.o
+Dealer.o
+Rules.o
+Game.o
+Defs.o
+Simulation.o
+GameCreator.o
+qrc_BlackJackSimulator.o

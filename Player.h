@@ -18,17 +18,22 @@
 class Player {
 public:
 	Player(const std::string& name, int bank_roll,
-		std::shared_ptr<Strategy> strategy, std::shared_ptr<BetStrategy> bet_strategy);
+		std::unique_ptr<Strategy> strategy, std::unique_ptr<BetStrategy> bet_strategy);
 
 	struct Stats {
 		Stats();
-		Stats(bool is_ruined, double roi, int initial_bank_roll, int end_bank_roll);
+		Stats(bool is_ruined,
+			  double roi,
+			  int initial_bank_roll,
+			  int end_bank_roll,
+			  const std::vector<int> bank_roll_record);
 		bool is_ruined = false;
 		double roi = 0.0;
 
 		// Bank roll in pennies
 		int initial_bank_roll = 0;
 		int end_bank_roll = 0;
+		std::vector<int> bank_roll_record;
 	};
 
 	Action Go(const Card& up_card, int true_count);
@@ -77,9 +82,10 @@ private:
 	// Bank roll is in pennies
 	int bank_roll_;
 	const int initial_bank_roll_;
+	std::vector<int> bank_roll_record_;
 
-	std::shared_ptr<Strategy> strategy_;
-	std::shared_ptr<BetStrategy> bet_strategy_;
+	std::unique_ptr<Strategy> strategy_;
+	std::unique_ptr<BetStrategy> bet_strategy_;
 };
 
 #endif /* PLAYER_H_ */

@@ -10,9 +10,9 @@
 #include "Dealer.h"
 #include "Constants.h"
 
-Dealer::Dealer(std::shared_ptr<DealerStrategy> strategy) :
+Dealer::Dealer(std::unique_ptr<DealerStrategy> strategy) :
 	hand_(0),
-	strategy_(strategy) {}
+	strategy_(std::move(strategy)) {}
 
 Action Dealer::Go() {
 	Action act = strategy_->Decide(hand_);

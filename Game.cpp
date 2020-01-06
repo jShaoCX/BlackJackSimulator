@@ -72,7 +72,7 @@ bool Game::AreAnyPlayersIn() const {
 }
 
 void Game::Deal() {
-	std::cout << "Dealing..." << std::endl;
+	//std::cout << "Dealing..." << std::endl;
 	int true_count = shoe_->GetTrueCount();
 
 	for (const auto& player : players_) {
@@ -86,17 +86,17 @@ void Game::Deal() {
 		if (player->IsIn(min_bet_, true_count)) {
 			player->Hit(shoe_->GetNextCard());
 		}
-		std::cout << player->ToString() << std::endl;
+		//std::cout << player->ToString() << std::endl;
 	}
 	dealer_->AddCard(shoe_->GetNextCard());
-	std::cout << dealer_->ToString() << std::endl;
-	std::cout << "Done Dealing..." << std::endl;
+	//std::cout << dealer_->ToString() << std::endl;
+	//std::cout << "Done Dealing..." << std::endl;
 }
 
 void Game::Play() {
-	std::cout << "Play..." << std::endl;
+	//std::cout << "Play..." << std::endl;
 	if(dealer_->HasBlackJack()) {
-		std::cout << "Dealer has BlackJack" << std::endl;
+		//std::cout << "Dealer has BlackJack" << std::endl;
 		return;
 	}
 
@@ -104,7 +104,7 @@ void Game::Play() {
 		if (!player->GetHands().empty()) {
 			Action act = player->Go(dealer_->GetUpCard(), shoe_->GetTrueCount());
 			while(act != Action::kDone) {
-				std::cout << player->ToString() <<  " - Action: " << ActionToString(act) << std::endl;
+				//std::cout << player->ToString() <<  " - Action: " << ActionToString(act) << std::endl;
 				switch (act) {
 					case Action::kHit:
 						player->Hit(shoe_->GetNextCard());
@@ -125,12 +125,12 @@ void Game::Play() {
 				}
 				act = player->Go(dealer_->GetUpCard(), shoe_->GetTrueCount());
 			}
-			std::cout << player->ToString() << std::endl;
+			//std::cout << player->ToString() << std::endl;
 		}
 	}
 	Action dealer_act = dealer_->Go();
 	while(dealer_act != Action::kDone) {
-		std::cout << dealer_->ToString() <<  " - Action: " << ActionToString(dealer_act) << std::endl;
+		//std::cout << dealer_->ToString() <<  " - Action: " << ActionToString(dealer_act) << std::endl;
 		switch (dealer_act) {
 			case Action::kHit:
 				dealer_->AddCard(shoe_->GetNextCard());
@@ -143,12 +143,12 @@ void Game::Play() {
 		}
 		dealer_act = dealer_->Go();
 	}
-	std::cout << dealer_->ToString() << std::endl;
-	std::cout << "Done Playing..." << std::endl;
+	//std::cout << dealer_->ToString() << std::endl;
+	//std::cout << "Done Playing..." << std::endl;
 }
 
 void Game::PayOut() {
-	std::cout << "Pay Out..." << std::endl;
+	//std::cout << "Pay Out..." << std::endl;
 	// Take care of blackjacks first
 	if(dealer_->HasBlackJack()) {
 		for (const auto& player : players_) {
@@ -194,18 +194,18 @@ void Game::PayOut() {
 			}
 		}
 	}
-	std::cout << "Done Paying Out..." << std::endl;
+	//std::cout << "Done Paying Out..." << std::endl;
 }
 
 void Game::ClearTable() {
-	std::cout << "Clear Table..." << std::endl;
+	//std::cout << "Clear Table..." << std::endl;
 	for (const auto& player : players_) {
 		player->Clear();
-		std::cout << player->ToString() << std::endl;
+		//std::cout << player->ToString() << std::endl;
 	}
 	dealer_->Clear();
-	std::cout << shoe_->ToString() << std::endl;
-	std::cout << "Done Clearing Table..." << std::endl;
+	//std::cout << shoe_->ToString() << std::endl;
+	//std::cout << "Done Clearing Table..." << std::endl;
 }
 
 std::unordered_map<std::string, Player::Stats> Game::GetEndGameStats() const {

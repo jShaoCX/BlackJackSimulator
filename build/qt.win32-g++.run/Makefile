@@ -608,7 +608,15 @@ Simulation.o: ../../Simulation.cpp ../../Simulation.h \
 		../../Shoe.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Simulation.o ..\..\Simulation.cpp
 
-GameCreator.o: ../../GameCreator.cpp ../../GameCreator.h
+GameCreator.o: ../../GameCreator.cpp ../../GameCreator.h \
+		../../Rules.h \
+		../../Defs.h \
+		../../Card.h \
+		../../Hand.h \
+		../../Game.h \
+		../../Dealer.h \
+		../../Player.h \
+		../../Shoe.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o GameCreator.o ..\..\GameCreator.cpp
 
 qrc_BlackJackSimulator.o: qrc_BlackJackSimulator.cpp 

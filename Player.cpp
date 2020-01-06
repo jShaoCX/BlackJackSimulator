@@ -12,20 +12,22 @@
 #include <iomanip>
 
 Player::Player(const std::string& name, int bank_roll,
-		std::shared_ptr<Strategy> strategy, std::shared_ptr<BetStrategy> bet_strategy) :
+		std::unique_ptr<Strategy> strategy, std::unique_ptr<BetStrategy> bet_strategy) :
 	name_(name),
 	current_hand_idx_(0),
 	bank_roll_(bank_roll),
 	initial_bank_roll_(bank_roll),
-	strategy_(strategy),
-	bet_strategy_(bet_strategy) {
+	bank_roll_record_{{initial_bank_roll_}},
+	strategy_(std::move(strategy)),
+	bet_strategy_(std::move(bet_strategy)) {
 }
 
-Player::Stats::Stats(bool is_ruined, double roi, int initial_bank_roll, int end_bank_roll) :
+Player::Stats::Stats(bool is_ruined, double roi, int initial_bank_roll, int end_bank_roll, const std::vector<int> bank_roll_record) :
 	is_ruined(is_ruined),
 	roi(roi),
 	initial_bank_roll(initial_bank_roll),
-	end_bank_roll(end_bank_roll) {
+	end_bank_roll(end_bank_roll),
+	bank_roll_record(bank_roll_record) {
 }
 
 Player::Stats::Stats() :
@@ -102,10 +104,12 @@ void Player::Clear() {
 
 void Player::WinMoney(int amount) {
 	bank_roll_ += amount;
+	bank_roll_record_.push_back(bank_roll_);
 }
 
 void Player::LoseMoney(int amount) {
 	bank_roll_ -= amount;
+	bank_roll_record_.push_back(bank_roll_);
 }
 
 std::string Player::ToString() const {
@@ -127,11 +131,12 @@ Player::Stats Player::GetStats() const {
 	return Stats(initial_bank_roll_ * 0.05 > bank_roll_,
 		(bank_roll_ - initial_bank_roll_) /
 			static_cast<double>(initial_bank_roll_) * 100.0,
-		initial_bank_roll_, bank_roll_);
+		initial_bank_roll_, bank_roll_, bank_roll_record_);
 }
 
 void Player::Reset() {
 	bank_roll_ = initial_bank_roll_;
+	bank_roll_record_.clear();
 	hands_.clear();
 	current_hand_idx_ = 0;
 }
